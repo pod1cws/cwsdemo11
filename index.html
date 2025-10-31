@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page with Headers and Containers</title>
+    <style>
+        .container {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .header, .title {
+            font-weight: bold;
+            margin: 5px 0;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin: 10px 0;
+        }
+        .section {
+            background-color: #eef;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="header">Top Gainers</h1>
+        <p>Some text related to top gainers...</p>
+    </div>
+
+    <div class="container">
+        <h2 class="title">Low Float Top Gainers</h2>
+        <p>Some text related to low float top gainers...</p>
+    </div>
+
+    <div class="container">
+        <h3 class="header">Small Cap - High of Day Momentum</h3>
+        <p>Some text related to small cap high of day momentum...</p>
+    </div>
+
+    <div class="section">
+        <h4>Section Header Example</h4>
+        <p>Text inside a section...</p>
+        <a href="/stock/abc">Stock Link</a>
+    </div>
+
+    <div class="container">
+        <div class="header">Other Header</div>
+        <p>Text under a div with class 'header'</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h5>Another Section Header</h5>
+            <p>Text inside another section...</p>
+        </div>
+    </div>
+
+    <script>
+        // Your provided JavaScript code here
+        function findContainerForHeader(headerEl) {
+            if (!headerEl) return null;
+            var parent = headerEl.closest("div, section, article, table, [class*='container'], [class*='section']");
+            while (parent && parent !== document.body) {
+                if (parent.querySelector("table, a[href*='/stock/']")) return parent;
+                if (parent.parentElement && parent.parentElement.closest) {
+                    parent = parent.parentElement.closest("div, section, article, table, [class*='container']");
+                } else {
+                    parent = null;
+                }
+            }
+            return null;
+        }
+
+        function getAllowedContainers() {
+            var nodeList = document.querySelectorAll("h1,h2,h3,h4,h5,h6,[class*='header'],[class*='title'],div,span");
+            var headers = [];
+            for (var i = 0; i < nodeList.length; i++) {
+                try {
+                    if (headerMatchesPattern(nodeList[i].innerText)) headers.push(nodeList[i]);
+                } catch (e) {}
+            }
+            var containers = [];
+            for (i = 0; i < headers.length; i++) {
+                var c = findContainerForHeader(headers[i]);
+                if (c && containers.indexOf(c) === -1) containers.push(c);
+            }
+            return containers;
+        }
+
+        // Example usage of the functions
+        console.log(getAllowedContainers());
+    </script>
+
+</body>
+</html>
+
